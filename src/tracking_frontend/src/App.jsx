@@ -1,30 +1,82 @@
-import { useState } from 'react';
-import { tracking_backend } from 'declarations/tracking_backend';
+import React from "react";
+import { ChakraProvider } from "@chakra-ui/react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { FacilityProvider } from "./contexts/FacilityContext";
+import { AmbulanceProvider } from "./contexts/AmbulanceContext";
+import { PatientProvider } from "./contexts/PatientContext";
+import { AccidentProvider } from "./contexts/AccidentContext";
+import { ReportProvider } from "./contexts/ReportContext";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import LandingPage from "./components/LandingPage";
+import Login from "./pages/Login";
+import PendingApproval from "./components/PendingApproval";
+import AdminDashboard from "./pages/AdminDashboard";
+import FacilityDashboard from "./pages/FacilityDashboard";
+import AmbulanceDashboard from "./pages/AmbulanceDashboard";
+import FacilityRegistration from "./components/AdminDashboard/FacilityRegistration";
+import AmbulanceRegistration from "./components/AdminDashboard/AmbulanceRegistration";
 
 function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    tracking_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
-
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <AuthProvider>
+      <FacilityProvider>
+        <AmbulanceProvider>
+          <PatientProvider>
+            <AccidentProvider>
+              <ReportProvider>
+                <ChakraProvider>
+                  <Router>
+                    <Header />
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={<LandingPage />}
+                      />
+                      <Route
+                        path="/login"
+                        element={<Login />}
+                      />
+                      <Route
+                        path="/register/facility"
+                        element={<FacilityRegistration />}
+                      />
+                      <Route
+                        path="/register/ambulance"
+                        element={<AmbulanceRegistration />}
+                      />
+                      <Route
+                        path="/pending-approval"
+                        element={<PendingApproval />}
+                      />
+                      <Route
+                        path="/admin-dashboard"
+                        element={<AdminDashboard />}
+                      />
+                      <Route
+                        path="/facility-dashboard"
+                        element={<FacilityDashboard />}
+                      />
+                      <Route
+                        path="/ambulance-dashboard"
+                        element={<AmbulanceDashboard />}
+                      />
+                    </Routes>
+                    <Footer />
+                  </Router>
+                </ChakraProvider>
+              </ReportProvider>
+            </AccidentProvider>
+          </PatientProvider>
+        </AmbulanceProvider>
+      </FacilityProvider>
+    </AuthProvider>
   );
 }
 

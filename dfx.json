@@ -11,17 +11,40 @@
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
     },
-    "tracking_backend": {
-      "main": "src/tracking_backend/main.mo",
+    "adminCanister": {
+      "main": "src/tracking_backend/AdminCanister.mo",
+      "type": "motoko"
+    },
+    "ambulanceCanister": {
+      "main": "src/tracking_backend/AmbulanceCanister.mo",
+      "type": "motoko"
+    },
+    "facilityCanister": {
+      "main": "src/tracking_backend/FacilityCanister.mo",
+      "type": "motoko"
+    },
+    "patientCanister": {
+      "main": "src/tracking_backend/PatientCanister.mo",
+      "type": "motoko"
+    },
+    "reportCanister": {
+      "main": "src/tracking_backend/ReportCanister.mo",
+      "type": "motoko"
+    },
+    "accidentCanister": {
+      "main": "src/tracking_backend/AccidentCanister.mo",
       "type": "motoko"
     },
     "tracking_frontend": {
       "dependencies": [
-        "tracking_backend"
+        "adminCanister",
+        "ambulanceCanister",
+        "facilityCanister",
+        "patientCanister",
+        "reportCanister",
+        "accidentCanister"
       ],
-      "source": [
-        "src/tracking_frontend/dist"
-      ],
+      "source": ["src/tracking_frontend/dist"],
       "type": "assets",
       "workspace": "tracking_frontend"
     }
@@ -29,7 +52,16 @@
   "defaults": {
     "build": {
       "args": "",
-      "packtool": ""
+      "packtool": "mops sources"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral",
+      "cors": {
+        "allowed_origins": ["http://localhost:3000"]
+      }
     }
   },
   "output_env_file": ".env",
